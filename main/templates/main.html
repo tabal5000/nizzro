@@ -1,0 +1,76 @@
+{% extends 'base.html' %} 
+{% block title %}Vpis{% endblock %} {% block content %}
+
+<div class="ui container">
+
+<button class="ui primary button" id="create_modal">
+    Insert
+</button>
+
+{{user}}
+
+<div class="ui modal transition">
+    <i class="close icon"></i>
+    <div class="header">
+      Vnesi računalnik
+    </div>
+    <div class="content">
+        <form method="post" action="/create" class="ui form">
+          {% csrf_token %}
+            <div class="field">
+              <label>Naziv</label>
+              {{ form_create.title }}
+              
+            </div>
+            <div class="field">
+              <label>Opis</label>
+              {{ form_create.description }}
+            </div>
+            <div class="field">
+              <label>Serijska številka</label>
+              {{ form_create.serial_number }}
+            </div>
+            <div class="field">
+              <label>Leto izdelave</label>
+              {{ form_create.date_created }}
+            </div>
+            <div class="field">
+              <label>Ključne besede</label>
+              {{ form_create.keywords }}
+            </div>
+    </div>
+    <div class="actions">
+      <div class="ui button">Cancel</div>
+      <button class="ui green button" type="submit">Shrani</button>
+    </div>
+  </form>
+  </div>
+
+
+<table class="ui fixed table">
+    <thead>
+      <tr>
+      <th>#</th>
+      <th>Naziv</th>
+      <th>Serijska številka</th>
+      <th>Opis</th>
+      <th>Ključne besede</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+      {% for computer in computers %}
+        <tr>
+          <td> {{ forloop.counter0 }} </td>
+          <td>{{ computer.title }}</td>
+          <td>{{ computer.serial_number }}</td>
+          <td>{{ computer.description }}</td>
+          <td>{{ computer.keywords }}</td>
+          <td>
+              <button class="ui red button delete_computer" data-id="{{computer.id}}">(Z)Briši</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+  {% endblock %}
