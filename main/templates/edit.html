@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Vpis{% endblock %}
+{% block content %}
+<div class="ui container">
+
+    <form id="edit_form" method="post" action="" class="ui form">
+        {% csrf_token %}
+        <div class="field">
+            <label>{{form.title.label_tag}}</label>
+            {{ form.title }}
+        </div>
+        <div class="field">
+            <label>{{form.description.label_tag}}</label>
+            {{ form.description }}
+        </div>
+        <div class="field">
+            <label>{{form.serial_number.label_tag}}</label>
+            {{ form.serial_number }}
+        </div>
+        <div class="field">
+            <label>{{form.date_created.label_tag}}</label>
+            {{ form.date_created }}
+        </div>
+        <div class="field">
+            <label>{{form.keywords.label_tag}}</label>
+            {{ form.keywords }}
+        </div>
+        <button class="ui green button" type="submit">Submit</button>
+    </form>
+</div>
+    {% endblock %}

@@ -111,7 +111,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -127,3 +127,7 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL="/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+
+LOGIN_REDIRECT_URL = 'main'
+DATE_INPUT_FORMATS = ['%d.%m.%Y','%j.%n.%Y','%d.%n.%Y','%j.%m.%Y']

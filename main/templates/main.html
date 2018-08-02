@@ -1,76 +1,111 @@
 {% extends 'base.html' %} 
-{% block title %}Vpis{% endblock %} {% block content %}
-
+{% block title %}Vpis{% endblock %} 
+{% block content %}
 <div class="ui container">
+    <button class="ui primary button" id="create_modal">
+        Insert
+    </button>
 
-<button class="ui primary button" id="create_modal">
-    Insert
-</button>
+    <table class="ui fixed table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Naziv</th>
+                <th>Serijska številka</th>
+                <th>Opis</th>
+                <th>Ključne besede</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for computer in computers %}
+            <tr>
+                <td> {{ forloop.counter }} </td>
+                <td>{{ computer.title }}</td>
+                <td>{{ computer.serial_number }}</td>
+                <td>{{ computer.description }}</td>
+                <td>{{ computer.keywords }}</td>
+                <td>
+                    <a class="ui blue button edit_computer" href="/computer/edit/{{computer.id}}">Uredi</a>
+                    <button class="ui red button delete_computer" data-id="{{computer.id}}">(Z)Briši</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-{{user}}
-
-<div class="ui modal transition">
-    <i class="close icon"></i>
-    <div class="header">
-      Vnesi računalnik
+    <div class="ui modal transition add-modal">
+        <div class="header">
+            <h1>Vnesi novi računalnik </h1>
+        </div>
+        <i class="close icon"></i>
+        <div class="content">
+            <form id="create_form" method="post" action="/create" class="ui form">
+                {% csrf_token %}
+                <div class="field">
+                    <label>{{form_create.title.label_tag}}</label>
+                    {{ form_create.title }}
+                </div>
+                <div class="field">
+                    <label>{{form_create.description.label_tag}}</label>
+                    {{ form_create.description }}
+                </div>
+                <div class="field">
+                    <label>{{form_create.serial_number.label_tag}}</label>
+                    {{ form_create.serial_number }}
+                </div>
+                <div class="field">
+                    <label>{{form_create.date_created.label_tag}}</label>
+                    {{ form_create.date_created }}
+                </div>
+                <div class="field">
+                    <label>{{form_create.keywords.label_tag}}</label>
+                    {{ form_create.keywords }}
+                </div>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <button class="ui green button" type="submit">Shrani</button>
+        </div>
+        </form>
     </div>
-    <div class="content">
-        <form method="post" action="/create" class="ui form">
-          {% csrf_token %}
-            <div class="field">
-              <label>Naziv</label>
-              {{ form_create.title }}
-              
-            </div>
-            <div class="field">
-              <label>Opis</label>
-              {{ form_create.description }}
-            </div>
-            <div class="field">
-              <label>Serijska številka</label>
-              {{ form_create.serial_number }}
-            </div>
-            <div class="field">
-              <label>Leto izdelave</label>
-              {{ form_create.date_created }}
-            </div>
-            <div class="field">
-              <label>Ključne besede</label>
-              {{ form_create.keywords }}
-            </div>
-    </div>
-    <div class="actions">
-      <div class="ui button">Cancel</div>
-      <button class="ui green button" type="submit">Shrani</button>
-    </div>
-  </form>
-  </div>
 
+    <div class="ui modal transition edit-modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Spremeni podatke o računalniku
+        </div>
+        <div class="content">
+            <form id="edit_form" method="post" action="/create" class="ui form">
+                {% csrf_token %}
+                <div class="field">
+                    <label>Naziv</label>
+                    {{ form_create.title }}
 
-<table class="ui fixed table">
-    <thead>
-      <tr>
-      <th>#</th>
-      <th>Naziv</th>
-      <th>Serijska številka</th>
-      <th>Opis</th>
-      <th>Ključne besede</th>
-      <th></th>
-    </tr></thead>
-    <tbody>
-      {% for computer in computers %}
-        <tr>
-          <td> {{ forloop.counter0 }} </td>
-          <td>{{ computer.title }}</td>
-          <td>{{ computer.serial_number }}</td>
-          <td>{{ computer.description }}</td>
-          <td>{{ computer.keywords }}</td>
-          <td>
-              <button class="ui red button delete_computer" data-id="{{computer.id}}">(Z)Briši</button>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+                </div>
+                <div class="field">
+                    <label>Opis</label>
+                    {{ form_create.description }}
+                </div>
+                <div class="field">
+                    <label>Serijska številka</label>
+                    {{ form_create.serial_number }}
+                </div>
+                <div class="field">
+                    <label>Leto izdelave</label>
+                    {{ form_create.date_created }}
+                </div>
+                <div class="field">
+                    <label>Ključne besede</label>
+                    {{ form_create.keywords }}
+                </div>
+        </div>
+        <div class="actions">
+            <div class="ui cancel button">Cancel</div>
+            <button class="ui green button" type="submit">Shrani</button>
+        </div>
+        </form>
+    </div>
 </div>
-  {% endblock %}
+
+{% endblock %}

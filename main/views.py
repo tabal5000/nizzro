@@ -1,19 +1,41 @@
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.shortcuts import redirect 
-from django.http import HttpResponse
-from .forms_config.forms import CreateComputerForm
-from .models  import *
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .forms_config.forms import ComputerForm
+from .models  import Computer
 # Create your views here.
 def MainPage(request):
-    form_create_computer = CreateComputerForm()
+    form_create_computer = ComputerForm()
     computers = Computer.objects.all()
-    print()
+    # paginator = Paginator(computers, 100)
+    # page = request.GET.get('page')
+    # try:
+    #     response_data = paginator.page(page)
+    # except PageNotAnInteger:
+    #     response_data = paginator.page(1)
+    # except EmptyPage:
+    #     response_data = paginator.page(paginator.num_pages)
     return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : computers})
+
+def Edit_Computer(request,pk):
+    computer = Computer.objects.get(id=pk)
+    if request.method == 'GET':
+        form_edit_computer = ComputerForm(instance=computer)
+        return render(request, 'edit.html', {'form' : form_edit_computer})
+    elif request.method == 'POST':
+        form = ComputerForm(request.POST,instance=computer)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.path_info)  
+        else:
+            print('form invalid!')
+            return HttpResponseRedirect(request.path_info)  
+    return HttpResponseRedirect(request.path_info)  
     
 def Create(request):
-    form_create_computer = CreateComputerForm()
-    form = CreateComputerForm(request.POST)
+    form = ComputerForm(request.POST)
     if form.is_valid():
         data = form.cleaned_data
         try:
@@ -23,7 +45,7 @@ def Create(request):
             print("Error: ",e)
         return redirect('main')
     else:
-        print('poop')
+        print('Form invalid.')
         return redirect('main')
 
 def Delete(request,pk):
