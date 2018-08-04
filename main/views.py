@@ -1,23 +1,38 @@
 from django.shortcuts import render
 from django.db import IntegrityError
+from django.db.models import Q
 from django.shortcuts import redirect 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms_config.forms import ComputerForm
 from .models  import Computer
 # Create your views here.
+"""
+
+"""
 def MainPage(request):
     form_create_computer = ComputerForm()
-    computers = Computer.objects.all()
-    # paginator = Paginator(computers, 100)
-    # page = request.GET.get('page')
-    # try:
-    #     response_data = paginator.page(page)
-    # except PageNotAnInteger:
-    #     response_data = paginator.page(1)
-    # except EmptyPage:
-    #     response_data = paginator.page(paginator.num_pages)
-    return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : computers})
+	
+    query = request.GET.get('search')
+    if query == "" or query == None:
+        computers = Computer.objects.all()
+        return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : computers})
+
+    filtered_computers = set() # Te racunalnike bom na koncu vrnil
+    computers = set() # Zacasna mnozica 
+    splitan_query = query.split(",")
+	# Najprej naredim eno množico v katero dodam vse racunalnike, ki ustrezajo prvemu kriteriju
+    for comp in Computer.objects.filter(description__contains=splitan_query[0].strip()):
+        filtered_computers.add(comp)
+	
+	# Potem pa za vsak kriterij naredim presek racunalnikov, ki she vedno ustrezajo
+    for query in splitan_query[1:]:
+        for comp in Computer.objects.filter(description__contains=query.strip()):
+            computers.add(comp)	
+        filtered_computers = filtered_computers & computers # Naredim presek z "novimi" racunalniki	
+    return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : filtered_computers})
+
+    
 
 def Edit_Computer(request,pk):
     computer = Computer.objects.get(id=pk)
@@ -51,7 +66,14 @@ def Create(request):
 def Delete(request,pk):
     Computer.objects.get(id=pk).delete()
     return HttpResponse(status=200)
+	
+
     
+	
+	
+	
+	
+	
 """ @login_required
 @user_passes_test(is_osebje)
 def StudentList(request):
