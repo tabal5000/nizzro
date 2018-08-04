@@ -5,7 +5,16 @@
     <button class="ui primary button" id="create_modal">
         Insert
     </button>
-
+	
+	<div class="topnav">
+	  <div class="search-container">
+		<form action="http://127.0.0.1:8000">
+		  <input type="text" placeholder="npr. i7, 8GB" name="search">
+		  <button type="submit">Submit</button>
+		</form>
+	  </div>
+	</div>
+	
     <table class="ui fixed table">
         <thead>
             <tr>
@@ -19,17 +28,32 @@
         </thead>
         <tbody>
             {% for computer in computers %}
+			<!--
+			izpis = False
+			search_words = GET[search]
+			if search_words == "":
+				izpis = True
+			else:
+				for word in search_words.split(" "):
+					if word in computer.description:
+						izpis = True
+						break			
+			if izpis:
+			-->
+			
             <tr>
                 <td> {{ forloop.counter }} </td>
                 <td>{{ computer.title }}</td>
                 <td>{{ computer.serial_number }}</td>
                 <td>{{ computer.description }}</td>
                 <td>{{ computer.keywords }}</td>
+				
                 <td>
                     <a class="ui blue button edit_computer" href="/computer/edit/{{computer.id}}">Uredi</a>
                     <button class="ui red button delete_computer" data-id="{{computer.id}}">(Z)Briši</button>
                 </td>
             </tr>
+			
             {% endfor %}
         </tbody>
     </table>
