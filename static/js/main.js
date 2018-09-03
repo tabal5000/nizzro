@@ -20,17 +20,19 @@ $(document).ready(function () {
     }
     var csrftoken = getCookie('csrftoken');
     //console.log(csrftoken);
-    var student_id = null;
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     });
 
-    $("#create_modal").click(function() {
-        $(".add-modal").modal('show');     
+    $("#add_list_element_btn").click(function() {
+        $("#add_list_element_modal").modal('show');     
     });
 
+    $("#create_processor_modal_btn").click(function() {
+        $("#add_processor_modal").modal('show');     
+    });
 
     // $(".edit_computer").click(function() {
     //     $(".edit-modal").modal('show'); 
@@ -75,17 +77,25 @@ $(document).ready(function () {
     // });
 
     //pošlješ request z metodo DELETE na nek jeben naslov NAPRIMER /computer/1 
-    $(".delete_computer").click(function() {
+    $(".delete_list_element").click(function() {
+        // $('#delete_element_confirm_dialog').modal('show');
         var id = $(this).attr("data-id");
         console.log(id);
         $.ajax({
-        url: '/computer/' + id,
+        url: '/list_element/' + id,
         type: 'DELETE', 
         success: function(result)
         {
             location.reload();
         }
     });
+    });
+
+    $(".edit_list_element").click(function() {
+        // $('#delete_element_confirm_dialog').modal('show');
+        var id = $(this).attr("data-id");
+        console.log(id);
+        
     });
     
 

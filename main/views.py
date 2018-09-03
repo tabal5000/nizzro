@@ -1,79 +1,65 @@
 from django.shortcuts import render
 from django.db import IntegrityError
-from django.db.models import Q
-from django.shortcuts import redirect 
+from django.shortcuts import redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms_config.forms import ComputerForm
-from .models  import Computer
+from .filters import *
+from .models import *
+from .forms_config.forms import ListElementForm, ProcessorForm
 # Create your views here.
 """
 
 """
-def MainPage(request):
-    form_create_computer = ComputerForm()
-	
-    query = request.GET.get('search')
-    if query == "" or query == None:
-        computers = Computer.objects.all()
-        return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : computers})
-
-    filtered_computers = set() # Te racunalnike bom na koncu vrnil
-    computers = set() # Zacasna mnozica 
-    splitan_query = query.split(",")
-	# Najprej naredim eno množico v katero dodam vse racunalnike, ki ustrezajo prvemu kriteriju
-    for comp in Computer.objects.filter(description__contains=splitan_query[0].strip()):
-        filtered_computers.add(comp)
-	
-	# Potem pa za vsak kriterij naredim presek racunalnikov, ki she vedno ustrezajo
-    for query in splitan_query[1:]:
-        for comp in Computer.objects.filter(description__contains=query.strip()):
-            computers.add(comp)	
-        filtered_computers = filtered_computers & computers # Naredim presek z "novimi" racunalniki	
-    return render(request, 'main.html', {'form_create' : form_create_computer, 'computers' : filtered_computers})
-
-    
-
-def Edit_Computer(request,pk):
-    computer = Computer.objects.get(id=pk)
+def MainPageView(request):
     if request.method == 'GET':
-        form_edit_computer = ComputerForm(instance=computer)
-        return render(request, 'edit.html', {'form' : form_edit_computer})
-    elif request.method == 'POST':
-        form = ComputerForm(request.POST,instance=computer)
+        processor_form = ProcessorForm()
+        return render(request,'main.html', {'processor_form' : processor_form })
+
+def SystemListsView(request):
+
+    if request.method == 'GET':
+        request_copy = request.GET.copy()
+        if not request.GET:
+            request_copy['syslist_id'] = '1'
+        list_element_form = ListElementForm()
+
+        list_element_filter = ListElementsFilter(request_copy,queryset=ListElements.objects.all())
+        filter_form = list_element_filter.form
+        list_elements = list_element_filter.qs
+        return render(request,'system_lists.html',{'list_elements' : list_elements,
+                            'filter_form':filter_form, 'add_list_element_form' : list_element_form})
+
+    if request.method == 'POST':
+        form = ListElementForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(request.path_info)  
+            data = form.cleaned_data
+            try:
+                list_element = ListElements(**data).save()
+            except IntegrityError as e:
+                print('Error',e)
+            return redirect('syslists_view')
         else:
-            print('form invalid!')
-            return HttpResponseRedirect(request.path_info)  
-    return HttpResponseRedirect(request.path_info)  
-    
-def Create(request):
-    form = ComputerForm(request.POST)
-    if form.is_valid():
-        data = form.cleaned_data
-        try:
-            computer = Computer(**data)
-            computer.save()
-        except IntegrityError as e:
-            print("Error: ",e)
-        return redirect('main')
-    else:
-        print('Form invalid.')
-        return redirect('main')
+            print('Form invalid.')
+            return redirect('syslists_view')
 
-def Delete(request,pk):
-    Computer.objects.get(id=pk).delete()
-    return HttpResponse(status=200)
-	
+def ListElementsDetailView(request,pk):
+    if request.method == 'DELETE':
+        ListElements.objects.get(id=pk).delete()
+        return HttpResponse(status=204)
 
-    
-	
-	
-	
-	
-	
+def ProcessorView(request):
+    if request.method == 'POST':
+        form = ProcessorForm(request.POST,request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+            try:
+                processor = Processor(**data).save()
+            except IntegrityError as e:
+                print('Error',e)
+            return redirect('main_view')
+        else:
+            print('Form invalid.')
+            return redirect('main_view')
+
 """ @login_required
 @user_passes_test(is_osebje)
 def StudentList(request):

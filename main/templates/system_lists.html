@@ -1,0 +1,46 @@
+{% extends 'base.html' %} 
+{% block title %}Šifranti{% endblock %} 
+{% block content %}
+<div class="ui container">
+    
+    <div class="ui two column grid">
+        <div class="row">
+            <div class="column">
+                <form action="" method="get">
+                    {{ filter_form.syslist_id}}
+                </form>
+            </div>
+            <div class="column right aligned">
+                <button class="ui primary button" id="add_list_element_btn">
+                    New entry
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <table class="ui selectable celled table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Vrednost</th>
+                <th class="center aligned">Opcije</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list_element in list_elements %}
+            <tr>
+                <td class="collapsing"> {{ forloop.counter }} </td>
+                <td>{{ list_element.value }}</td>
+                <td class="right aligned collapsing">
+                    <button class="ui blue button edit_list_element" data-id="{{list_element.id}}">Uredi</button>
+                    <button class="ui red button delete_list_element" data-id="{{list_element.id}}">(Z)Briši</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        {% include "components/remove_list_element.html" %}
+        {% include "components/add_list_element.html" %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<div class="ui modal transition" id="add_processor_modal">
+    <div class="header">
+        <h1>Vnesi novi procesor</h1>
+    </div>
+    <i class="close icon"></i>
+    <div class="content">
+        <form enctype="multipart/form-data" id="create_form" method="post" action="/processor" class="ui form">
+            {% csrf_token %}
+            {{ processor_form.errors }}
+            {{ processor_form.as_p }}
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">Cancel</div>
+        <button class="ui green button" type="submit">Shrani</button>
+    </div>
+    </form>
+</div>

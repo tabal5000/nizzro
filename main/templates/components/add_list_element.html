@@ -1,0 +1,26 @@
+<div class="ui modal transition" id="add_list_element_modal">
+    <div class="header">
+        <h1>Insert a new entry</h1>
+    </div>
+    <i class="close icon"></i>
+    <div class="content">
+        <form id="create_list_element_form" method="post" action="" class="ui form">
+            {% csrf_token %}
+
+            <div class="field">
+                <label>{{add_list_element_form.value.label_tag}}</label>
+                {{ add_list_element_form.value }}
+            </div>
+
+            <div class="field">
+                <label>{{add_list_element_form.syslist_id.label_tag}}</label>
+                {{ add_list_element_form.syslist_id }}
+            </div>
+    </div>
+    <div class="actions">
+        <div class="ui cancel button">Cancel</div>
+        <button class="ui green button" type="submit">Save</button>
+    </div>
+    </form>
+</div>
+    

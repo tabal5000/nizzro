@@ -15,70 +15,76 @@
 
 <body class="Site">
 
-        <div class="ui inverted attached stackable menu" style="margin-bottom: 4em">
-                <div class="ui container">
-                  <a class="item" href="{% url 'main' %}">
-                    <i class="home icon"></i> Home
-                  </a>
-                  
-                  <div class="right item">
-                    <a class="item"> Pozdravljen, {{ user }} </a>
-                    <a class="item"><i class="user icon"> </i> Profil </a>
-                  </div>
-                </div>
-              </div>
+    <div class="ui inverted menu">
+        <div class="ui container">  
+            <a class="ui item" href="{% url 'main_view' %}">
+                <i class="home icon"></i> Home
+            </a>
+            <a class="ui item" href="{% url 'syslists_view' %}"> System Lists </a>
+        <div class="right menu">
+            {% if user.is_authenticated %}
+            <a class="ui item" href="{% url 'syslists_view' %}"> System Lists </a>
+            <a class="ui item" href="{% url 'logout' %}"> <i class="sign-out icon"></i> Logout </a>
+            <a class="ui item"><i class="user icon"></i> {{ user.username }}</a>
+            {% else %}
+                <a class="ui item" href="{% url 'login' %}">
+                    <i class="sign-in icon"></i>Login
+                </a>
+            {% endif %}
+        </div>
+        </div>
+    </div>
 
 
     <div class="Site-content">
-        {% block content %} 
-        {% endblock %}
+        {% block content %} {% endblock %}
     </div>
 
     <div class="ui inverted vertical footer segment">
-            <div class="ui center aligned container">
-                <div class="ui stackable inverted divided grid">
-                    <div class="three wide column">
-                        <h4 class="ui inverted header">Group 1</h4>
-                        <div class="ui inverted link list">
-                            <a href="#" class="item">Link One</a>
-                            <a href="#" class="item">Link Two</a>
-                            <a href="#" class="item">Link Three</a>
-                            <a href="#" class="item">Link Four</a>
-                        </div>
-                    </div>
-                    <div class="three wide column">
-                        <h4 class="ui inverted header">Group 2</h4>
-                        <div class="ui inverted link list">
-                            <a href="#" class="item">Link One</a>
-                            <a href="#" class="item">Link Two</a>
-                            <a href="#" class="item">Link Three</a>
-                            <a href="#" class="item">Link Four</a>
-                        </div>
-                    </div>
-                    <div class="three wide column">
-                        <h4 class="ui inverted header">Group 3</h4>
-                        <div class="ui inverted link list">
-                            <a href="#" class="item">Link One</a>
-                            <a href="#" class="item">Link Two</a>
-                            <a href="#" class="item">Link Three</a>
-                            <a href="#" class="item">Link Four</a>
-                        </div>
-                    </div>
-                    <div class="seven wide column">
-                        <h4 class="ui inverted header">Footer Header</h4>
-                        <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        <div class="ui center aligned container">
+            <div class="ui stackable inverted divided grid">
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Group 1</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">Link One</a>
+                        <a href="#" class="item">Link Two</a>
+                        <a href="#" class="item">Link Three</a>
+                        <a href="#" class="item">Link Four</a>
                     </div>
                 </div>
-                <div class="ui inverted section divider"></div>
-                <i class="close icon ui centered mini image"></i>
-                <div class="ui horizontal inverted small divided link list">
-                    <a class="item" href="#">Site Map</a>
-                    <a class="item" href="#">Contact Us</a>
-                    <a class="item" href="#">Terms and Conditions</a>
-                    <a class="item" href="#">Privacy Policy</a>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Group 2</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">Link One</a>
+                        <a href="#" class="item">Link Two</a>
+                        <a href="#" class="item">Link Three</a>
+                        <a href="#" class="item">Link Four</a>
+                    </div>
+                </div>
+                <div class="three wide column">
+                    <h4 class="ui inverted header">Group 3</h4>
+                    <div class="ui inverted link list">
+                        <a href="#" class="item">Link One</a>
+                        <a href="#" class="item">Link Two</a>
+                        <a href="#" class="item">Link Three</a>
+                        <a href="#" class="item">Link Four</a>
+                    </div>
+                </div>
+                <div class="seven wide column">
+                    <h4 class="ui inverted header">Footer Header</h4>
+                    <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
                 </div>
             </div>
+            <div class="ui inverted section divider"></div>
+            <i class="close icon ui centered mini image"></i>
+            <div class="ui horizontal inverted small divided link list">
+                <a class="item" href="#">Site Map</a>
+                <a class="item" href="#">Contact Us</a>
+                <a class="item" href="#">Terms and Conditions</a>
+                <a class="item" href="#">Privacy Policy</a>
+            </div>
         </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
